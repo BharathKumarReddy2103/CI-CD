@@ -52,7 +52,7 @@ A robust CI/CD pipeline usually includes the following stages:
 ### How It Works
 
 - Developers push code to a **Version Control System** like GitHub.
-- Jenkins polls the repository for changes or listens via webhooks.
+- Jenkins pulls the repository for changes or listens via webhooks.
 - When a change is detected, Jenkins triggers the pipeline:
   - Executes Maven to build Java applications.
   - Runs unit tests via JUnit.
