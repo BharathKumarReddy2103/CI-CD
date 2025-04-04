@@ -94,7 +94,7 @@ pipeline {
 
 - **Scalability Issues:** Each Jenkins master requires separate compute resources.
 - **Resource Wastage:** Idle Jenkins nodes consume compute even when no pipelines are running.
-- **Complex Maintenance:** Maintenance Overhead: As more teams adopt CI/CD, managing separate Jenkins master and agent nodes for each team becomes increasingly complex, leading to higher configuration, monitoring, and resource management efforts.
+- **Maintenance Overhead:** As more teams adopt CI/CD, managing separate Jenkins master and agent nodes for each team becomes increasingly complex, leading to higher configuration, monitoring, and resource management efforts.
 
 ## Modern CI/CD with GitHub Actions
 
