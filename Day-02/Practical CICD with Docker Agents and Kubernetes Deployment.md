@@ -427,7 +427,6 @@ In this article, we implemented a **complete CI/CD pipeline using Jenkins, Docke
 - Use **`pipeline-syntax` generator** to explore Groovy DSL
 - Separate logic into **multiple stages and steps**
 - Store Jenkinsfiles in **Git for version control**
-- **Avoid 'latest'** tag in Docker images; use versioned tags
 
 ---
 
