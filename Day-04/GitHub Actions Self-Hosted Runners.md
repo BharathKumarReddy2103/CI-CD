@@ -1,82 +1,122 @@
-# GitHub Actions with Self-Hosted Runners :
+# GitHub Actions with Self-Hosted Runners in Docker:
 
 ## Introduction
 
-In today’s DevOps world, Continuous Integration and Continuous Deployment (CI/CD) are crucial for delivering high-quality software quickly and reliably. GitHub Actions has become a popular CI/CD tool, especially for teams already using GitHub for source control. While GitHub-hosted runners are sufficient for many projects, enterprise-grade applications often require more control, scalability, and customization.
+CI/CD pipelines are the backbone of modern DevOps workflows. GitHub Actions offers a streamlined CI/CD platform deeply integrated with GitHub repositories. While GitHub-hosted runners are suitable for many scenarios, using **self-hosted runners** in **Docker containers** gives you full control over the environment, dependencies, and resources.
 
-This article walks you through the use of **self-hosted runners** with **GitHub Actions**, using **AWS EC2** as the runner host. We’ll explore the difference between GitHub-hosted and self-hosted runners, real-world use cases, security best practices, and even compare GitHub Actions with Jenkins for better decision-making.
+In this article, you’ll learn how to set up a **self-hosted GitHub Actions runner using Docker**, understand the difference between GitHub-hosted and self-hosted runners, explore real-world use cases, and compare GitHub Actions with Jenkins.
 
 ---
 
 ## What Are GitHub Actions Runners?
 
-In CI/CD systems, **runners** (or **agents**) are the compute environments where jobs execute.
-
 ### GitHub-Hosted Runners
 
-- **Provided by GitHub**
-- **Free for public repositories**
-- **Temporary**—spun up for each job and destroyed after execution
-- **Pre-configured** with popular runtimes like Node.js, Python, Java, etc.
+- Managed and provisioned by GitHub
+- Free for public repositories
+- Short-lived and auto-terminated after each job
+- Pre-installed with common runtimes and tools
 
 ### Self-Hosted Runners
 
-- **Hosted on your infrastructure** (e.g., AWS EC2, on-prem servers)
-- **Persistent**—you control the environment
-- Ideal for **private repositories**, **custom hardware**, or **security-sensitive workloads**
+- Hosted on your infrastructure (Docker, VM, bare metal)
+- Persistent and customizable
+- Full control over dependencies and resources
+- Ideal for private repositories and enterprise use
 
 ---
 
-## When to Use Self-Hosted Runners?
+## When to Use Self-Hosted Runners in Docker?
 
-Consider self-hosted runners when:
+You should use Docker-based self-hosted runners when:
 
-- You're working with **private repositories**
-- You need **custom environments** or **large resources** (e.g., 32GB RAM)
-- You're developing **security-sensitive applications** (e.g., banking)
-- You need **special dependencies** not available on GitHub-hosted runners
-
----
-
-## Setting Up a Self-Hosted Runner on AWS EC2
-
-### Step 1: Launch an EC2 Instance
-
-1. Navigate to the **EC2 Dashboard**
-2. Click **Launch Instance**
-3. Choose **Ubuntu** as the OS
-4. Use default instance type (t2.micro or as needed)
-5. Assign an existing **key pair**
-6. Configure **Security Group**:
-   - Inbound Rules: Open **port 80 (HTTP)** and **443 (HTTPS)**
-   - Outbound Rules: Open **port 80 (HTTP)** and **443 (HTTPS)**
-
-> **Tip**: Do *not* use `All traffic` for security reasons. Always follow the principle of least privilege.
+- You want **reproducible environments** that can be version-controlled
+- Your application needs **specific software** or **custom libraries**
+- You require **more memory/CPU** than GitHub-hosted runners offer
+- You are working with **private repositories** and need enhanced **security**
+- You want to **run jobs locally** without provisioning virtual machines
 
 ---
 
-### Step 2: Register the Runner in GitHub
+## Setting Up a GitHub Self-Hosted Runner in Docker
 
-1. Navigate to your repository → **Settings** → **Actions** → **Runners**
-2. Click **New self-hosted runner**
-3. Choose OS type and architecture (e.g., `Linux`, `x64`)
-4. Follow the on-screen instructions:
-   ```bash
-   # Example commands (do not share the token!)
-   mkdir actions-runner && cd actions-runner
-   curl -o actions-runner-linux-x64-2.x.x.tar.gz -L https://github.com/actions/runner/releases/download/v2.x.x/actions-runner-linux-x64-2.x.x.tar.gz
-   tar xzf ./actions-runner-linux-x64-2.x.x.tar.gz
-   ./config.sh --url https://github.com/<owner>/<repo> --token <generated_token>
-   ./run.sh
-   ```
+### Step 1: Clone the Official Runner Image
 
-5. You should see: `Runner is listening for jobs...`
+Use the official [GitHub Actions Runner image](https://github.com/actions/runner) to set up your container.
+
+### Step 2: Create a Dockerfile
+
+```Dockerfile
+FROM ubuntu:22.04
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y curl jq git sudo && \
+    apt-get clean
+
+# Create a user
+RUN useradd -m -s /bin/bash runner
+WORKDIR /home/runner
+
+# Set environment variables
+ENV RUNNER_VERSION=2.315.0
+ENV RUNNER_HOME=/home/runner/actions-runner
+
+# Download GitHub Actions runner
+RUN curl -o actions-runner.tar.gz -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz && \
+    mkdir -p ${RUNNER_HOME} && \
+    tar -zxf actions-runner.tar.gz -C ${RUNNER_HOME} && \
+    rm actions-runner.tar.gz
+
+# Copy entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+```
+
+### Step 3: Create the Entry Script (`entrypoint.sh`)
+
+```bash
+#!/bin/bash
+
+# Configure the runner
+cd /home/runner/actions-runner
+./config.sh --url https://github.com/<OWNER>/<REPO> \
+            --token $RUNNER_TOKEN \
+            --name $(hostname) \
+            --labels self-hosted,docker \
+            --unattended \
+            --replace
+
+# Start the runner
+./run.sh
+```
+
+> Replace `<OWNER>/<REPO>` with your GitHub repository path.
 
 ---
 
-### Step 3: Modify Your GitHub Workflow
+### Step 4: Build and Run the Docker Container
 
-Update your `.github/workflows/<workflow>.yml` file:
+```bash
+docker build -t gh-self-hosted-runner .
+
+docker run -d \
+  --name gh-runner \
+  -e RUNNER_TOKEN=<YOUR_GENERATED_TOKEN> \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  gh-self-hosted-runner
+```
+
+> You can get the `RUNNER_TOKEN` from:  
+> `GitHub Repo → Settings → Actions → Runners → New self-hosted runner`
+
+---
+
+## Modify Your GitHub Workflow for Self-Hosted Runner
+
+Update your `.github/workflows/ci.yml` file to use the self-hosted label:
 
 ```yaml
 name: Python CI
@@ -92,7 +132,7 @@ jobs:
         python-version: [3.8, 3.9]
 
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v2
 
     - name: Set up Python
@@ -100,78 +140,70 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Run addition script
+    - name: Run Script
       run: python addition.py
 ```
 
 ---
 
-## Why Inbound and Outbound Rules Matter
+## Security and Networking Best Practices
 
-- **Inbound rules**: Allow GitHub to send jobs to the runner
-- **Outbound rules**: Allow the runner to send results back to GitHub
-
-Without these, your runner may fail to communicate, causing CI jobs to hang or fail.
-
----
-
-## GitHub Actions vs Jenkins: Which One to Choose?
-
-| Feature               | GitHub Actions                  | Jenkins                             |
-|-----------------------|----------------------------------|--------------------------------------|
-| Hosting               | Cloud (GitHub-hosted/self-hosted)| Self-hosted (fully)                  |
-| Plugin Ecosystem      | Growing                         | Mature and rich                      |
-| Integration           | Best with GitHub                | Works with any source control system |
-| Cost (Public Projects)| Free                            | Requires your own infrastructure     |
-| UI/UX                 | Modern                          | Traditional                          |
-| Learning Curve        | Low                             | Moderate                             |
-
-### Summary:
-- **Use GitHub Actions** for **open-source** or fully GitHub-based workflows.
-- **Use Jenkins** for **private projects** requiring complex orchestration and extensive plugin support.
+- Avoid exposing Docker daemons to the public
+- Use **GitHub secrets** to manage credentials
+- Isolate runners in **Docker networks**
+- Limit container capabilities and add **resource quotas**
 
 ---
 
-## Interview-Ready Questions & Answers
+## GitHub Actions vs Jenkins
 
-### 1. Why did you choose GitHub Actions over Jenkins or AWS CodeBuild?
+| Feature               | GitHub Actions (Docker Runner)  | Jenkins (Docker Agent)              |
+|----------------------|----------------------------------|--------------------------------------|
+| Setup Complexity     | Simple with containerization     | Medium to complex                    |
+| Plugin Support       | Limited (growing)                | Extensive                            |
+| Docker Integration   | Native support                   | Native + plugins                     |
+| Cost (Public Repos)  | Free                             | Self-hosted, incurs infra cost       |
+| Security             | Secrets via GitHub settings      | Plugin-based security                |
+| Ideal For            | GitHub-centric projects          | Complex, large-scale CI pipelines    |
 
-If your project is open-source or already hosted on GitHub, GitHub Actions provides a seamless, native CI/CD experience with free runners and strong integration with GitHub features like Projects, Wikis, and Dependabot.
+---
 
-### 2. How do you secure secrets in GitHub Actions?
+## Common Interview Questions & Answers
 
-By using the **Settings > Secrets and Variables** section in GitHub, you can securely store sensitive data like API keys, tokens, and credentials.
+### 1. Why use Docker for self-hosted runners?
 
-### 3. How do you define GitHub workflows?
+- Portability
+- Easy resets via container restarts
+- Consistency across environments
+- Lightweight compared to VMs
 
-Inside the repo, create a file at:
+### 2. How do you manage secrets securely?
+
+Store sensitive values in:
 
 ```
-.github/workflows/<workflow-name>.yml
+GitHub → Settings → Secrets and variables → Actions
 ```
 
-Define the `on:` trigger (e.g., `push`, `pull_request`), and the job steps.
+Access them in workflows via `${{ secrets.SECRET_NAME }}`.
+
+### 3. How does GitHub Actions detect your Docker runner?
+
+Once registered, your container listens for jobs via `run.sh`. On new commits or PRs, GitHub dispatches the job to available runners matching the `self-hosted` label.
 
 ---
 
-## Practical Use Case: Deploying a Python Script
+## Best Practices
 
-You can use GitHub Actions to test and deploy a simple Python script (`addition.py`) using self-hosted runners. Just replace the runner label in your YAML and watch the jobs execute from your own infrastructure.
-
----
-
-## Best Practices for Using Self-Hosted Runners
-
-- Keep the runner updated with the latest version from GitHub
-- Run runners in isolated environments (e.g., Docker containers)
-- Use auto-scaling for large-scale jobs
-- Monitor logs and metrics
-- Never expose your runner token publicly
+- Use labels (e.g., `--labels self-hosted,docker`) to organize runners
+- Monitor runner health with Docker logs or external observability tools
+- Auto-restart runners using Docker Compose or systemd
+- Keep the runner image up to date with security patches
 
 ---
 
 ## Conclusion
 
-GitHub Actions with self-hosted runners offers powerful flexibility for teams that need control, customization, and security. Whether you're deploying from AWS, using a private VPC, or running enterprise applications, this setup ensures performance and reliability.
+Docker-based GitHub self-hosted runners give you full control over your CI/CD environment while leveraging GitHub's powerful workflow engine. Whether you want to run tests locally, enforce custom environments, or meet enterprise security policies, Docker offers the flexibility and repeatability you need.
 
-Understanding when to use GitHub-hosted vs self-hosted runners is critical for both DevOps engineers and architects. With this guide, you're ready to implement and even defend your choices in interviews and real-world production pipelines.
+For scalable and secure DevOps pipelines, this approach is both professional and production-ready.
