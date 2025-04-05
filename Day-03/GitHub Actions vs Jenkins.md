@@ -133,8 +133,6 @@ GitHub Actions can also support enterprise-grade Java applications:
 - Custom Kubernetes deployment actions
 - SonarQube scanner CLI (configured with GitHub Secrets)
 
-This setup is detailed in the [example repository](https://github.com/) (add your repo link) and showcases how to integrate end-to-end CI/CD for containerized microservices.
-
 ---
 
 ## Managing Self-Hosted Runners
