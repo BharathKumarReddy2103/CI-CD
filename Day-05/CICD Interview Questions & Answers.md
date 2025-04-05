@@ -3,7 +3,7 @@
 
 ## Introduction
 
-As the adoption of CI/CD (Continuous Integration and Continuous Deployment) becomes a cornerstone in modern DevOps practices, mastering tools like Jenkins is essential. In this article, we explore practical, scenario-based Jenkins and CI/CD interview questions, providing detailed answers that reflect real-world DevOps implementations. This guide is based on Day 21 of the "Complete DevOps Course" and is perfect for engineers preparing for interviews, aspiring to sharpen their CI/CD skills, or contributing to open-source DevOps repositories.
+As the adoption of CI/CD (Continuous Integration and Continuous Deployment) becomes a cornerstone in modern DevOps practices, mastering tools like Jenkins is essential. In this article, we explore practical, scenario-based Jenkins and CI/CD interview questions, providing detailed answers that reflect real-world DevOps implementations. This guide is perfect for engineers preparing for interviews, aspiring to sharpen their CI/CD skills, or contributing to open-source DevOps repositories.
 
 ---
 
