@@ -1,4 +1,4 @@
-# Building the Ultimate CI/CD Pipeline Using Jenkins and Argo CD (GitOps Approach)
+# Building the Ultimate CI/CD Pipeline Using Jenkins and Argo CD (GitOps Approach) Explanation
 
 ## Introduction
 
