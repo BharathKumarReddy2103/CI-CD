@@ -277,7 +277,7 @@ We use a simple **Java Spring Boot MVC application** located at:
 pipeline {
   agent {
     docker {
-      image 'abhishekf9/maven-docker-agent:latest'
+      image 'nbkumar2103/maven-docker-agent:latest'
     }
   }
   environment {
@@ -310,9 +310,9 @@ pipeline {
     stage('Docker Build & Push') {
       steps {
         sh '''
-        docker build -t abhishekf9/ultimate-cicd:${BUILD_NUMBER} java-springboot-app
+        docker build -t nbkumar2103/ultimate-cicd:${BUILD_NUMBER} java-springboot-app
         echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin
-        docker push abhishekf9/ultimate-cicd:${BUILD_NUMBER}
+        docker push nbkumar2103/ultimate-cicd:${BUILD_NUMBER}
         '''
       }
     }
@@ -320,14 +320,14 @@ pipeline {
     stage('Update Manifest') {
       steps {
         sh '''
-        git clone https://github.com/abhishekf9/jenkins-zero-to-hero.git
+        git clone https://github.com/nbkumar2103/jenkins-zero-to-hero.git
         cd jenkins-zero-to-hero/java-springboot-app/manifests
         sed -i "s|replace-image-tag|${BUILD_NUMBER}|" deployment.yaml
         git config --global user.email "ci@demo.com"
         git config --global user.name "CI Bot"
         git add deployment.yaml
         git commit -m "CI: Update image tag to ${BUILD_NUMBER}"
-        git push https://$GITHUB_TOKEN@github.com/abhishekf9/jenkins-zero-to-hero.git
+        git push https://$GITHUB_TOKEN@github.com/nbkumar2103/jenkins-zero-to-hero.git
         '''
       }
     }
@@ -355,7 +355,7 @@ pipeline {
 - Requires no permanent slave nodes
 - Portable and repeatable build environments
 
-Image used: `abhishekf9/maven-docker-agent:latest` (includes Maven + Docker)
+Image used: `nbkumar2103/maven-docker-agent:latest` (includes Maven + Docker)
 
 ---
 
@@ -436,7 +436,7 @@ spec:
     spec:
       containers:
         - name: springboot
-          image: abhishekf9/ultimate-cicd:replace-image-tag
+          image: nbkumar2103/ultimate-cicd:replace-image-tag
           ports:
             - containerPort: 8080
 ```
