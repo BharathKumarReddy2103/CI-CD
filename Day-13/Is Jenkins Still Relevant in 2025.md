@@ -142,4 +142,4 @@ If you are building a **new CI/CD pipeline** in a cloud environment, consider **
 ## 🚀 Stay Connected
 
 If you liked this article or have suggestions, feel free to connect with me on [GitHub](https://github.com/BharathKumarReddy2103) or leave a comment.  
-Keep learning, keep building, and embrace the future of DevOps 🌟 
+Keep learning, keep building, and embrace the future of DevOps. 🌟 
