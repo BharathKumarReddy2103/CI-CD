@@ -65,7 +65,7 @@ But when I start new projects today, I reach for **GitHub Actions** or **GitLab 
 
 ---
 
-> **Change my mind.**
+> **What’s your take on this shift in CI/CD tools?**
 
 ---
 
