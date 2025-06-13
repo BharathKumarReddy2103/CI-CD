@@ -71,6 +71,6 @@ But when I start new projects today, I reach for **GitHub Actions** or **GitLab 
 
 🌟 If you found this helpful or agree with the perspective, **star this repository** to support more DevOps content like this.
 
-📬 Have a different opinion? Open an [Issue](https://github.com/BharathKumarReddy2103/CICD/issues) or join the [Discussion](https://github.com/BharathKumarReddy2103/CICD/discussions)—let’s talk CI/CD.
+📬 Have a different opinion? Open an **Issue** or join the **Discussion**—let’s talk CI/CD.
 
 👨‍💻 **If you enjoy DevOps content like this, consider [following my GitHub profile](https://github.com/BharathKumarReddy2103)** for more articles, projects, and hands-on insights from the world of CI/CD and cloud engineering.
