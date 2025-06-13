@@ -58,7 +58,7 @@ For a DevOps Engineer in 2025, the productivity and maintainability gains are to
 
 I still respect Jenkins. It played a key role in shaping modern DevOps practices.
 
-But when I start new projects today, I reach for **GitHub Actions** or **GitLab CI**—tools built for the cloud-native era.
+But when I start new projects today, I reach for **GitHub Actions** or **GitLab CICD**—tools built for the cloud-native era.
 
 > DevOps is about speed, scale, and simplicity.  
 > **And that’s no longer Jenkins.**
