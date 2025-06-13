@@ -70,6 +70,6 @@ But when I start new projects today, I reach for **GitHub Actions** or **GitLab 
 ---
 
 🌟 **If you found this helpful or agree with the perspective,  
-[star this repository](https://github.com/BharathKumarReddy/CICD)** to support more DevOps content like this.
+[star this repository](https://github.com/BharathKumarReddy2103/CICD)** to support more DevOps content like this.
 
-📬 Have a different opinion? Open an [Issue](https://github.com/BharathKumarReddy/CICD/issues) or join the [Discussion](https://github.com/BharathKumarReddy/CICD/discussions)—let’s talk CI/CD.
+📬 Have a different opinion? Open an [Issue](https://github.com/BharathKumarReddy2103/CICD/issues) or join the [Discussion](https://github.com/BharathKumarReddy2103/CICD/discussions)—let’s talk CI/CD.
