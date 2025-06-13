@@ -29,7 +29,7 @@ But over time, I realized maintaining Jenkins at scale came with a cost.
 ## ⚡ Why GitHub Actions (and Others) Are Simply Better in 2025
 
 The DevOps ecosystem has changed.  
-Modern tools like **GitHub Actions**, **GitLab CI**, and **CircleCI** now offer:
+Modern tools like **GitHub Actions**, **GitLab CI** now offer:
 
 | Feature                     | Jenkins 🧱                 | GitHub Actions ⚡         |
 |----------------------------|----------------------------|---------------------------|
