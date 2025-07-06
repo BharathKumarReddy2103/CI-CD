@@ -103,6 +103,6 @@ jobs:
 
 Jenkins has been a reliable and widely adopted tool in the DevOps ecosystem — known for its flexibility, strong plugin support, and proven performance in real-world CI/CD workflows. But with great power comes… great maintenance overhead.
 
-If you're just beginning your DevOps journey — or you're ready to leave behind years of fragile pipelines and plugin-induced pain — **GitHub Actions** is a smart and future-proof choice.
+If you're just beginning your DevOps journey — or you're ready to move on from CI/CD pipelines that often break and cause problems because of plugin issues — **GitHub Actions** is a smart and future-proof choice.
 
 > ✨ “Use the right tool for the right time. The DevOps world has moved — don’t get left behind.”
