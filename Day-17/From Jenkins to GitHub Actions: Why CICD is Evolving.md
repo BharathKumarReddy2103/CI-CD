@@ -13,18 +13,23 @@ While Jenkins remains powerful, it's no secret that it comes with a set of ongoi
 ### ⚠️ Common Pain Points with Jenkins
 
 ✅ **Plugin Dependency Hell**
+
 Jenkins heavily relies on plugins — and when one breaks, your entire pipeline can go down.
 
 ✅ **No Native Version Control for Jobs**
+
 Job configurations are stored in the Jenkins UI by default, making it hard to track changes or collaborate effectively.
 
 ✅ **Complex Agent Management**
+
 Scaling Jenkins with distributed agents requires additional setup, networking, and security configurations.
 
 ✅ **Plugin Updates Are Risky**
+
 A simple update can break the build if plugin dependencies aren’t aligned properly.
 
 ✅ **Steep Learning Curve**
+
 For new DevOps engineers, Jenkins can feel overwhelming without deep hands-on experience.
 
 ---
@@ -36,21 +41,27 @@ If you’re just starting out — or you're looking for something **simpler, fas
 ### 🔧 Why GitHub Actions Makes Sense in 2025
 
 1. 🔄 **Native GitHub Integration**
+
    Built right into GitHub — no separate setup required
 
 2. 📦 **Simplified Workflows**
+
    YAML-based workflows make CI/CD pipelines easy to understand and maintain.
 
 3. ⚡ **Fast Start**
+
    You can get up and running within minutes. No plugin chaos.
 
 4. 🧱 **Reusable Actions**
+
    The GitHub Marketplace provides thousands of pre-built actions you can drop right into your workflow.
 
 5. 💸 **Cost-Effective for Small Teams**
+
    Generous free-tier usage for public and small private repos.
 
 6. 🌐 **Easily Scalable**
+
    Supports matrix builds, parallel jobs, and even self-hosted runners.
 
 ---
